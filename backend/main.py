@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth
+from routers import auth, inspections
 
 app = FastAPI(
     title="KEFS Inspection System",
@@ -19,6 +19,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(inspections.router, prefix="/api/inspections", tags=["Inspections"])
 
 @app.get("/")
 def root():
