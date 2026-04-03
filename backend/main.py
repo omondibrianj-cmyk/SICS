@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth, inspections
+from routers import auth, inspections, certifications, landing_stations, dashboard
 
 app = FastAPI(
     title="KEFS Inspection System",
@@ -8,7 +8,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Allow frontend to talk to backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -17,16 +16,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(inspections.router, prefix="/api/inspections", tags=["Inspections"])
+app.include_router(certifications.router, prefix="/api/certifications", tags=["Certifications"])
+app.include_router(landing_stations.router, prefix="/api/landing-stations", tags=["Landing Stations"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"])
 
 @app.get("/")
 def root():
-    return {
-        "message": "KEFS Inspection System API is running",
-        "version": "1.0.0"
-    }
+    return {"message": "KEFS Inspection System API is running", "version": "1.0.0"}
 
 @app.get("/health")
 def health_check():
