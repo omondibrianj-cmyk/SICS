@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KEFS — Kenya Fisheries Service Inspection System
 
-## Getting Started
+A full-stack, risk-based inspection and certification platform built for the Kenya Fisheries Service (KFS). Inspectors use this system to assess fish landing stations, generate risk scores using a hybrid ML model, and issue regulatory certificates.
 
-First, run the development server:
+---
 
+## 🏗️ System Architecture
+Next.js Frontend (localhost:3000)
+↕
+FastAPI Backend (localhost:8000)
+↕
+Supabase (PostgreSQL Database)
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 16, TypeScript, Tailwind CSS |
+| Backend | FastAPI, Python 3.12, Uvicorn |
+| Database | Supabase (PostgreSQL) |
+| ML Model | Scikit-Learn (Logistic Regression, 94% accuracy) |
+| PDF Generation | ReportLab + QR Code |
+| Explainability | SHAP |
+| Version Control | GitHub |
+
+---
+
+## 🗄️ Database Tables
+
+- `users` — Inspectors, supervisors, admins
+- `landing_stations` — Fish landing sites across Kenya
+- `inspections` — Inspection records with scoring fields
+- `risk_assessments` — Hybrid risk scores per inspection
+- `certifications` — Regulatory certificates issued
+
+---
+
+## 📊 Risk Scoring Formula
+
+Final Score = 0.7 × (Rule-Based Score) + 0.3 × (ML Probability × 100)
+Low    → 0–39
+Medium → 40–69
+High   → 70–100
+
+---
+
+## 🚀 Running Locally
+
+### Backend
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📡 API Endpoints
 
-## Learn More
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login |
+| GET | `/api/dashboard/stats` | Dashboard statistics |
+| POST | `/api/inspections/create` | Create inspection + risk score |
+| GET | `/api/inspections/all` | List all inspections |
+| POST | `/api/certifications/create` | Issue certification |
+| GET | `/api/certifications/{id}/download` | Download PDF certificate |
+| GET | `/api/landing-stations/all` | List landing stations |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+kefs_inspection_system/
+├── backend/
+│   ├── main.py
+│   ├── database.py
+│   ├── routers/
+│   │   ├── auth.py
+│   │   ├── inspections.py
+│   │   ├── certifications.py
+│   │   ├── landing_stations.py
+│   │   └── dashboard.py
+│   ├── modules/
+│   │   ├── risk_engine.py
+│   │   ├── ml_predictor.py
+│   │   └── pdf_generator.py
+│   └── models/
+│       ├── risk_model.pkl
+│       └── scaler.pkl
+└── frontend/
+├── app/
+│   ├── dashboard/
+│   ├── inspections/
+│   ├── certifications/
+│   ├── stations/
+│   ├── reports/
+│   ├── analytics/
+│   ├── login/
+│   └── register/
+├── components/
+│   └── layout/
+│       ├── Sidebar.tsx
+│       └── TopBar.tsx
+├── context/
+│   └── AuthContext.tsx
+└── lib/
+└── api.ts
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 👨‍💻 Author
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built as part of a dissertation project on risk-based fisheries inspection systems in Kenya.
