@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import { Bell, RefreshCw } from "lucide-react";
 
 interface TopBarProps {
@@ -8,17 +9,19 @@ interface TopBarProps {
 }
 
 export default function TopBar({ title, subtitle, action }: TopBarProps) {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("kefs_user");
+    if (stored) setUser(JSON.parse(stored));
+  }, []);
+
   const today = new Date().toLocaleDateString("en-KE", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   });
-
-  const user =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("kefs_user") || "{}")
-      : {};
 
   const initials = user?.full_name
     ? user.full_name
@@ -27,7 +30,7 @@ export default function TopBar({ title, subtitle, action }: TopBarProps) {
         .join("")
         .toUpperCase()
         .slice(0, 2)
-    : "KF";
+    : "??";
 
   return (
     <header className="topbar">
@@ -43,7 +46,7 @@ export default function TopBar({ title, subtitle, action }: TopBarProps) {
         <button className="topbar-btn" title="Notifications">
           <Bell size={16} />
         </button>
-        <div className="topbar-avatar" title={user?.full_name}>
+        <div className="topbar-avatar" title={user?.full_name || ""}>
           {initials}
         </div>
       </div>
